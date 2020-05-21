@@ -2,10 +2,10 @@ package main
 
 import (
 	"log"
-	"fmt"
+	_ "fmt"
 	"net/http"
 	"os"
-"encoding/json"
+_ "encoding/json"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 )
@@ -44,7 +44,7 @@ func main() {
 //
 //			log.Printf("Key = %v value = %v\n", key, value)
 //		}
-		resp := &Response{Error: false,
+		/*resp := Response{Error: false,
 			Message: "This is Registered",
 			User: UserType{
 				Id:       1,
@@ -58,8 +58,10 @@ func main() {
 		if err!=nil{
 		log.Println("Error is " + err.Error())
 		}
-		fmt.Fprintf(os.Stdout, "json resp : %s",resJson)
-		c.JSON(200, string(resJson))
+		fmt.Fprintf(os.Stdout, "json resp : %s",resJson)*/
+		test:=gin.H{"id":1,"username":"anshu","email":"testing@test.com","gender":"male"}
+		c.JSON(200,gin.H{"error":false,"message":"testing","user":test})
+//		c.JSON(200, resJson)
 	})
 
 	router.Run(":" + port)
