@@ -39,11 +39,12 @@ func main() {
 	})
 
 	router.POST("/registerUser", func(c *gin.Context) {
-//		values := c.Request.URL.Query()
-//		for key, value := range values {
-//
-//			log.Printf("Key = %v value = %v\n", key, value)
-//		}
+		log.Println("url is", c.Request.URL.Query())
+		values := c.Request.URL.Query()
+		for key, value := range values {
+
+			log.Printf("Key = %v value = %v\n", key, value)
+		}
 		/*resp := Response{Error: false,
 			Message: "This is Registered",
 			User: UserType{
