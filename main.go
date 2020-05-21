@@ -2,10 +2,8 @@ package main
 
 import (
 	"log"
-	_ "fmt"
 	"net/http"
 	"os"
-_ "encoding/json"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 )
@@ -45,21 +43,15 @@ func main() {
 
 			log.Printf("Key = %v value = %v\n", key, value)
 		}
-		/*resp := Response{Error: false,
-			Message: "This is Registered",
-			User: UserType{
-				Id:       1,
-				Username: "ANshu",
-				Email:    "hello@test.com",
-				Gender:   "Male",
-			},
-		}
-		log.Println(resp)
-		resJson,err :=json.Marshal(resp)
-		if err!=nil{
-		log.Println("Error is " + err.Error())
-		}
-		fmt.Fprintf(os.Stdout, "json resp : %s",resJson)*/
+
+                   var parsedData map[string]interface{}
+		   err:=c.BindJSON(&parsedData) 
+		   if err== nil {
+		       log.Println(parsedData)
+	       	   }else{ 
+		   log.Println("Error is ",err.Error())
+		   }
+
 		test:=gin.H{"id":1,"username":"anshu","email":"testing@test.com","gender":"male"}
 		c.JSON(200,gin.H{"error":false,"message":"testing","user":test})
 //		c.JSON(200, resJson)
