@@ -6,6 +6,7 @@ import (
 	"os"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
+"github.com/satori/go.uuid"
 )
 
 type Response struct {
@@ -18,6 +19,12 @@ type UserType struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Gender   string `json:"gender"`
+}
+type LoginData struct{
+	Email string `json:"email"  binding:"required"`
+	Gender string `json:"gender"  binding:"required"`
+	Password string `json:"password"  binding:"required"`
+	Username string `json:"username"  binding:"required"`
 }
 
 func main() {
@@ -44,16 +51,19 @@ func main() {
 			log.Printf("Key = %v value = %v\n", key, value)
 		}
 
-                   var parsedData map[string]interface{}
+                   var parsedData LoginData
 		   err:=c.BindJSON(&parsedData) 
 		   if err== nil {
 		       log.Println(parsedData)
 	       	   }else{ 
 		   log.Println("Error is ",err.Error())
+		   c.AbortWithStatusJSON(400,gin.H{"error":err.Error()})
+		   return 
 		   }
-
-		test:=gin.H{"id":1,"username":"anshu","email":"testing@test.com","gender":"male"}
-		c.JSON(200,gin.H{"error":false,"message":"testing","user":test})
+		   uid := uuid.NewV4()
+		   uidstr := uid.String()
+		test:=gin.H{"id":uidstr,"username":parsedData.Username,"email":parsedData.Email,"gender":parsedData.Gender}
+		c.JSON(200,gin.H{"error":false,"message":"registration success","user":test})
 //		c.JSON(200, resJson)
 	})
 
