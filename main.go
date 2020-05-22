@@ -35,6 +35,14 @@ type LoginData struct{
 	PhoneNumber string `json:"phonenumber" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+type DoctorInfo struct{
+	Name string `json:"name"`
+	Slots []string `json:"slots"`
+}
+
+type DoctorsInfo struct{
+Info []DoctorInfo `json:"doctorsInfo"`
+}
 
 func main() {
 	err:=db.CreateClient()
@@ -55,6 +63,24 @@ func main() {
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "test.tmpl.html", nil)
+	})
+
+
+	router.GET("/doctorsInfo",func(c *gin.Context){
+		var doctorsArray []DoctorInfo
+		slots := []string{"10:00 AM","10:15 AM","10:30 AM"}
+		slots1 := []string{"11:00 AM","11:15 AM","11:30 AM"}
+		docInfo1 := DoctorInfo{
+			Name:"Doctor A",
+			Slots:slots,
+		}
+		docInfo2 := DoctorInfo{Name:"Doctor B",Slots:slots}
+		docInfo3 := DoctorInfo{Name:"Doctor C",Slots:slots1}
+		docInfo4 := DoctorInfo{Name:"Doctor D",Slots: slots}
+		doctorsArray = append(doctorsArray,docInfo1,docInfo2,docInfo3,docInfo4)
+		info := DoctorsInfo{Info:doctorsArray}
+		c.JSON(200,info)
+
 	})
 
 	router.POST("/registerUser", func(c *gin.Context) {
