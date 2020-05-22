@@ -87,7 +87,7 @@ func main() {
 			c.JSON(503,gin.H{"error":true,"message":"Internal Service Error"})
 			return
 		}else if isExisting == true{
-			c.JSON(409,gin.H{"error":true,",message":"User already exists"})
+			c.JSON(409,gin.H{"error":true,"message":"User already exists"})
 			return
 		}
 
