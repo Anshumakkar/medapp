@@ -8,6 +8,7 @@ import (
     "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
     "github.com/aws/aws-sdk-go/aws/credentials"
     "fmt"
+    "os"
 )
 // snippet-end:[dynamodb.go.create_item.imports]
 
@@ -38,8 +39,10 @@ func CreateClient() error {
     // Initialize a session that the SDK will use to load
     // credentials from the shared credentials file ~/.aws/credentials
     // and region from the shared configuration file ~/.aws/config.
+    key := os.Getenv("KEY")
+    secret := os.Getenv("SECRET")
 
-creds := credentials.NewStaticCredentials("AKIAJWLDEWOE33G3TRCA","M6Uuec7klcMjIwHue9l12XWbya+UkSS8D/LVgOVv","")
+creds := credentials.NewStaticCredentials(key,secret,"")
 sess, err := session.NewSession(&aws.Config{Credentials: creds,Region: aws.String("ap-south-1")})
 if err!=nil{
 	return err
