@@ -81,6 +81,16 @@ func main() {
 		email:=parsedData.Email
 		gender:=parsedData.Gender
 		password:=parsedData.Password
+
+		isExisting,err := db.CheckExistence(phoneNumber)
+		if err!=nil{
+			c.JSON(503,gin.H{"error":true,"message":"Internal Service Error"})
+			return
+		}else if isExisting == true{
+			c.JSON(409,gin.H{"error":true,",message":"User already exists"})
+			return
+		}
+
 		err= db.StoreItem(phoneNumber,email,username,password,gender,uidstr)
 		if err!=nil{
 			log.Println("Error while inserting into DB " ,err.Error())
@@ -110,14 +120,19 @@ func main() {
 		  c.JSON(500,gin.H{"error":true,"message":"Internal Service Error"})
 		  return
 		}
+		if err == nil && userData.PhoneNumber == "" {
+		   log.Println("No User Data with this ",parsedData.PhoneNumber)
+		   c.JSON(404,gin.H{"error":true,"message":"Not Registered"})
+		   return
+		}
 		if userData.Password != parsedData.Password{
-		log.Println("Password required is ",userData.Password," and password given is ",parsedData.Password)
-		c.JSON(403,gin.H{"error":true,"message":"Incorrect Credentials"})
-		return
+		  log.Println("Password required is ",userData.Password," and password given is ",parsedData.Password)
+		  c.JSON(403,gin.H{"error":true,"message":"PhoneNumber or password is incorrect"})
+		  return
 		}
 		test := gin.H{"id": userData.ID, "username": userData.Username, "email": userData.Email,
                         "gender": userData.Gender, "phonenumber": userData.PhoneNumber}
-                c.JSON(200, gin.H{"error": false, "message": "registration success", "user": test})
+                c.JSON(200, gin.H{"error": false, "message": "login success", "user": test})
 
 	})
 
